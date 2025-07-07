@@ -1,7 +1,6 @@
 from django.db import models
-from django.core.exceptions import ValidationError
+from rest_framework.serializers import ValidationError
 from django.utils import timezone
-import pytz
 
 from api.constants import ClassTypeChoices
 
@@ -47,10 +46,13 @@ class FitnessClass(TimeStampedModel):
         return self.available_slots > 0
 
     def book_slot(self):
-        if not self.is_available():
+        if not self.is_available:
             raise ValidationError(
                 f"No available slots for this {self.class_type} class"
             )
+
+        if self.class_time < timezone.now():
+            raise ValidationError(f"Class already started, cannot book slot.")
 
         self.available_slots -= 1
         self.save()
