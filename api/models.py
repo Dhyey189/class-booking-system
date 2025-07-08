@@ -8,7 +8,7 @@ from api.constants import ClassTypeChoices
 class TimeStampedModel(models.Model):
     """
     An abstract model, that can be used as base model to track record's created and updated
-    time.
+    date & time.
     """
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -19,6 +19,9 @@ class TimeStampedModel(models.Model):
 
 
 class FitnessClass(TimeStampedModel):
+    """
+    Stores details regarding different types of fitness classes available.
+    """
     name = models.CharField(max_length=100, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     class_type = models.CharField(
@@ -59,6 +62,9 @@ class FitnessClass(TimeStampedModel):
 
 
 class FitnessClassBooking(TimeStampedModel):
+    """
+    Stores booking details(slots) for a particular fitness class.
+    """
     fitness_class = models.ForeignKey(
         FitnessClass, on_delete=models.CASCADE, related_name="bookings"
     )
